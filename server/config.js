@@ -1,4 +1,5 @@
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 
@@ -12,7 +13,9 @@ export const config = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   MAX_FILE_SIZE_MB: parseInt(process.env.MAX_FILE_SIZE_MB || '30', 10),
   MAX_FILE_SIZE_BYTES: parseInt(process.env.MAX_FILE_SIZE_MB || '30', 10) * 1024 * 1024,
-  TEMP_UPLOAD_DIR: path.resolve(__dirname, 'uploads', 'temp'),
+  TEMP_UPLOAD_DIR: process.env.VERCEL
+    ? path.join(os.tmpdir(), 'anvesh_uploads')
+    : path.resolve(__dirname, 'uploads', 'temp'),
   
   // ClamAV Settings
   CLAMAV_HOST: process.env.CLAMAV_HOST || '127.0.0.1',

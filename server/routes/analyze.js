@@ -17,6 +17,13 @@ if (!fs.existsSync(config.TEMP_UPLOAD_DIR)) {
 // Multer storage with randomized filenames in isolated temporary folder
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    try {
+      if (!fs.existsSync(config.TEMP_UPLOAD_DIR)) {
+        fs.mkdirSync(config.TEMP_UPLOAD_DIR, { recursive: true });
+      }
+    } catch (e) {
+      // directory already created or handled
+    }
     cb(null, config.TEMP_UPLOAD_DIR);
   },
   filename: (req, file, cb) => {
