@@ -48,6 +48,11 @@ app.use('/api', analyzeRouter);
 app.use('/api', healthRouter);
 app.use('/api', samplesRouter);
 
+// Redirect /client or /client/* to / for seamless navigation
+app.get(['/client', '/client/*', '/index.html'], (req, res) => {
+  res.redirect('/');
+});
+
 // Serve frontend static files if built
 const clientDistPath = path.resolve(__dirname, '..', 'client', 'dist');
 if (fs.existsSync(clientDistPath)) {
