@@ -11,27 +11,39 @@ const STAGES = [
 ];
 
 export function ScanProgress({ currentStageIndex = 0, fileName, fileSize }) {
+  const progressPercent = Math.min(100, Math.round(((currentStageIndex + 1) / STAGES.length) * 100));
+
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 p-8 rounded-2xl bg-cyber-surface border border-cyber-border shadow-2xl">
-      <div className="flex items-center justify-between border-b border-cyber-border/70 pb-4">
+    <div className="w-full max-w-2xl mx-auto space-y-6 p-8 rounded-2xl bg-white border border-slate-200 shadow-elevated">
+      {/* Header bar */}
+      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div>
-          <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-            <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-            <span>Analyzing File...</span>
+          <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2">
+            <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
+            <span>Analyzing File In Sandbox...</span>
           </h3>
-          <p className="text-xs text-slate-400 mt-1">
-            <span className="font-mono text-cyan-300 font-semibold">{fileName}</span>
-            {fileSize && <span className="ml-2 text-slate-500">({fileSize})</span>}
+          <p className="text-xs text-slate-500 mt-1">
+            <span className="font-mono text-slate-800 font-semibold">{fileName}</span>
+            {fileSize && <span className="ml-2 text-slate-400">({fileSize})</span>}
           </p>
         </div>
         <div className="text-right">
-          <span className="text-xs font-mono font-bold text-cyan-400">
-            Stage {Math.min(currentStageIndex + 1, STAGES.length)} of {STAGES.length}
+          <span className="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md border border-sky-200">
+            Stage {Math.min(currentStageIndex + 1, STAGES.length)} / {STAGES.length}
           </span>
         </div>
       </div>
 
-      <div className="space-y-4">
+      {/* Progress track */}
+      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-sky-500 rounded-full transition-all duration-300"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
+      {/* Stages list */}
+      <div className="space-y-2.5">
         {STAGES.map((stage, idx) => {
           const isDone = idx < currentStageIndex;
           const isCurrent = idx === currentStageIndex;
@@ -42,39 +54,39 @@ export function ScanProgress({ currentStageIndex = 0, fileName, fileSize }) {
               key={stage.id}
               className={`flex items-start space-x-3.5 p-3 rounded-xl transition-all ${
                 isCurrent
-                  ? 'bg-cyan-950/30 border border-cyan-800/40 text-cyan-300'
+                  ? 'bg-sky-50/80 border border-sky-200/80'
                   : isDone
-                  ? 'bg-slate-900/40 border border-transparent text-slate-300'
-                  : 'text-slate-600 opacity-60'
+                  ? 'bg-slate-50/60 border border-slate-100 text-slate-700'
+                  : 'border border-transparent text-slate-400 opacity-60'
               }`}
             >
               <div className="mt-0.5">
                 {isDone ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 ) : isCurrent ? (
-                  <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-sky-600 animate-spin" />
                 ) : (
-                  <Icon className="w-5 h-5 text-slate-600" />
+                  <Icon className="w-4 h-4 text-slate-400" />
                 )}
               </div>
 
               <div className="flex-1">
                 <div className="flex items-center justify-between">
-                  <h4 className={`text-xs sm:text-sm font-semibold ${isCurrent ? 'text-white' : ''}`}>
+                  <h4 className={`text-xs font-semibold ${isCurrent ? 'text-sky-950 font-bold' : isDone ? 'text-slate-800' : 'text-slate-500'}`}>
                     {stage.label}
                   </h4>
                   {isCurrent && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-900/60 text-cyan-300 animate-pulse">
-                      Processing
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200 animate-pulse">
+                      Analyzing
                     </span>
                   )}
                   {isDone && (
-                    <span className="text-[10px] font-mono text-emerald-400">
+                    <span className="text-[10px] font-mono text-emerald-700 font-semibold">
                       Completed
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-slate-500 mt-0.5">
                   {stage.desc}
                 </p>
               </div>
@@ -83,8 +95,8 @@ export function ScanProgress({ currentStageIndex = 0, fileName, fileSize }) {
         })}
       </div>
 
-      <p className="text-center text-[11px] text-slate-500 italic pt-2">
-        Static inspection operates purely on binary structures without executing files.
+      <p className="text-center text-[11px] text-slate-400 italic pt-1">
+        Static analysis executes non-destructively on read-only byte buffers.
       </p>
     </div>
   );

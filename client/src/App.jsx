@@ -20,7 +20,6 @@ export default function App() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Load health and history on mount
   useEffect(() => {
     fetch('/api/health')
       .then((res) => res.json())
@@ -64,7 +63,6 @@ export default function App() {
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  // Perform Real File Analysis
   const analyzeFile = async (file) => {
     if (!file) return;
 
@@ -76,7 +74,6 @@ export default function App() {
       size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`
     });
 
-    // Advance stages smoothly while analysis proceeds
     const stageInterval = setInterval(() => {
       setScanStageIndex((prev) => (prev < 4 ? prev + 1 : prev));
     }, 600);
@@ -91,7 +88,7 @@ export default function App() {
       });
 
       clearInterval(stageInterval);
-      setScanStageIndex(5); // Risk synthesis stage
+      setScanStageIndex(5);
 
       const data = await res.json();
 
@@ -100,7 +97,6 @@ export default function App() {
       }
 
       if (data.success && data.report) {
-        // Small delay so user sees final stage complete
         setTimeout(() => {
           setActiveReport(data.report);
           saveToHistory(data.report);
@@ -117,7 +113,6 @@ export default function App() {
     }
   };
 
-  // Harmless demonstration sample loader
   const handleSelectSample = async (sampleId) => {
     setErrorMessage(null);
     try {
@@ -140,7 +135,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-cyber-bg text-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-50/70 text-slate-900 bg-grid-pattern">
       {/* Top Navigation */}
       <Navbar
         systemHealth={systemHealth}
@@ -151,25 +146,25 @@ export default function App() {
         hasActiveReport={Boolean(activeReport)}
       />
 
-      {/* Main Workspace Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Container */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         {/* Error notification banner */}
         {errorMessage && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-950/70 border border-rose-800 text-rose-200 text-xs flex items-center justify-between animate-in fade-in">
+          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center justify-between shadow-xs animate-in fade-in">
             <div className="flex items-center space-x-2.5">
-              <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
-              <span>{errorMessage}</span>
+              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+              <span className="font-medium">{errorMessage}</span>
             </div>
             <button
               onClick={() => setErrorMessage(null)}
-              className="p-1 rounded hover:bg-rose-900/60 text-rose-400 hover:text-white"
+              className="p-1 rounded-md hover:bg-rose-100 text-rose-600 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
         )}
 
-        {/* View Switching: Scanning vs Report vs Dropzone */}
+        {/* Dynamic Views */}
         {isScanning ? (
           <div className="py-12">
             <ScanProgress
@@ -211,9 +206,9 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-cyber-border/70 py-6 text-center text-xs text-slate-500 font-mono">
+      <footer className="border-t border-slate-200/80 bg-white/70 py-6 text-center text-xs text-slate-500 font-mono">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>ANVESH • AI Malware Detector • v1.0.0</span>
+          <span className="font-medium text-slate-600">ANVESH • AI Malware Detector • v1.0.0</span>
           <span>Static malicious-file analysis & threat-risk assessment system</span>
         </div>
       </footer>

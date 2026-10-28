@@ -18,16 +18,16 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-cyber-bg text-slate-100 flex items-center justify-center p-4">
-          <div className="max-w-md w-full p-6 rounded-2xl bg-cyber-surface border border-rose-800/80 shadow-2xl space-y-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-rose-950/60 border border-rose-600/50 flex items-center justify-center mx-auto text-rose-400">
+        <div className="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center p-4">
+          <div className="max-w-md w-full p-6 rounded-2xl bg-white border border-rose-200 shadow-elevated space-y-4 text-center">
+            <div className="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center mx-auto text-rose-600">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h2 className="text-lg font-bold text-white">Something Went Wrong</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h2 className="text-base font-bold text-slate-900">Something Went Wrong</h2>
+            <p className="text-xs text-slate-500 leading-relaxed">
               An unexpected user-interface rendering error occurred while displaying the report.
             </p>
-            <div className="p-3 rounded bg-black/50 border border-slate-800 text-[11px] font-mono text-rose-300 text-left overflow-x-auto max-h-32">
+            <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-[11px] font-mono text-rose-700 text-left overflow-x-auto max-h-32">
               {this.state.error?.message || 'Unknown render error'}
             </div>
             <button
@@ -35,9 +35,9 @@ export class ErrorBoundary extends React.Component {
                 this.setState({ hasError: false, error: null });
                 window.location.reload();
               }}
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors"
+              className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs transition-colors shadow-sm"
             >
-              <RefreshCw className="w-4 h-4" />
+              <RefreshCw className="w-4 h-4 text-white" />
               <span>Reload Application</span>
             </button>
           </div>
